@@ -9,7 +9,6 @@ public class System implements LoanHandler {
 
     @Override
     public void processLoan(Loan loan) {
-        if(person.getAccess() ==
 
     }
 
