@@ -10,7 +10,6 @@ public class Person {
     public int getAccess() {
         return Access;
     }
-
     public void setAccess(int access) {
         Access = access;
     }
