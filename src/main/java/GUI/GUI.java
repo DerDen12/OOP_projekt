@@ -10,7 +10,6 @@ public class GUI extends JFrame {
 
     private JPanel basicPanel;
     private JPanel loanForm;
-    private JButton createLoan;
     private JButton reviewLoan;
     private JButton approveLoan;
     private JButton denyLoan;
@@ -24,7 +23,7 @@ public class GUI extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
 
-    createLoan = new JButton("Create");
+    JButton createLoan = new JButton("Create");
     createLoan.setFont(new Font("Arial", Font.BOLD, 30));
 
 
@@ -47,20 +46,40 @@ public class GUI extends JFrame {
         remove(basicPanel);
 
         loanForm = new JPanel();
-        loanForm.setLayout(new GridLayout(2,2));
-        JLabel amountText = new JLabel("Částka:");
-        JLabel timeText = new JLabel("Po dobu:");
+        loanForm.setLayout(new GridLayout(4,4));
+
+        JLabel amountText = new JLabel("Částka: (CZK)", SwingConstants.CENTER);
+        JLabel timeText = new JLabel("Po dobu měsiců:", SwingConstants.CENTER);
+        JLabel interestText = new JLabel("S úrokem:", SwingConstants.CENTER);
+        JButton cancelButton = new JButton("Zpět");
+        JButton confirmButton = new JButton("Potvrdit");
+
 
         JTextField amountInput = new JTextField();
         JTextField timeInput = new JTextField();
+        JTextField interestInput = new JTextField();
 
         amountText.setFont(new Font("Arial", Font.BOLD, 30));
         timeText.setFont(new Font("Arial", Font.BOLD, 30));
+        interestText.setFont(new Font("Arial", Font.BOLD, 30));
+        cancelButton.setFont(new Font("Arial", Font.BOLD, 30));
+        confirmButton.setFont(new Font("Arial", Font.BOLD, 30));
+
+        amountInput.setFont(new Font("Arial", Font.BOLD, 30));
+        timeInput.setFont(new Font("Arial", Font.BOLD, 30));
+        interestInput.setFont(new Font("Arial", Font.BOLD, 30));
+        amountInput.setHorizontalAlignment(SwingConstants.CENTER);
+        timeInput.setHorizontalAlignment(SwingConstants.CENTER);
+        interestInput.setHorizontalAlignment(SwingConstants.CENTER);
 
         loanForm.add(amountText);
         loanForm.add(amountInput);
         loanForm.add(timeText);
         loanForm.add(timeInput);
+        loanForm.add(interestText);
+        loanForm.add(interestInput);
+        loanForm.add(cancelButton);
+        loanForm.add(confirmButton);
 
         add(loanForm, BorderLayout.CENTER);
 
