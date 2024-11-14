@@ -1,6 +1,6 @@
 package Logic;
 
-public class Person {
+public abstract class Person {
     protected int Access;
     protected String Name;
 

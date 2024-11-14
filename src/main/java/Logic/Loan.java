@@ -5,16 +5,31 @@ public class Loan {
     private int loanDuration;
     private double interest;
     private int accessRequired;
+    private int canPay;
     private int ID;
+    private Status status;
+    private LoanType type;
 
-    public Loan(int amount, int loanDuration, double interest, int accessRequired, int ID) {
+    public Loan(int amount, int loanDuration, double interest, int accessRequired, int canPay, int ID) {
         this.amount = amount;
         this.loanDuration = loanDuration;
         this.interest = interest;
         this.accessRequired = accessRequired;
+        this.canPay = canPay;
         this.ID = ID;
+        this.status = Status.CREATED;
+        this.type = determineType(amount);
     }
 
+    private LoanType determineType(int amount) {
+        if (amount < 10000) {
+            return LoanType.SMALL;
+        } else if (amount <= 50000) {
+            return LoanType.MEDIUM;
+        } else {
+            return LoanType.LARGE;
+        }
+    }
     public int getAmount() {
         return amount;
     }
@@ -47,11 +62,47 @@ public class Loan {
         this.accessRequired = accessRequired;
     }
 
+    public int getCanPay() {
+        return canPay;
+    }
+
+    public void setCanPay(int canPay) {
+        this.canPay = canPay;
+    }
+
     public int getID() {
         return ID;
     }
 
     public void setID(int ID) {
         this.ID = ID;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public LoanType getType() {
+        return type;
+    }
+
+    public void setType(LoanType type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Loan{" +
+                "amount= " + amount + " CZK" +
+                ", loanDuration= " + loanDuration + " months" +
+                ", interest= " + interest + " %" +
+                ", accessRequired= " + accessRequired +
+                ", canPay= " + canPay +
+                ",Loan ID= " + ID +
+                '}';
     }
 }
