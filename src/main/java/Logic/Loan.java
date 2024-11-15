@@ -1,5 +1,7 @@
 package Logic;
 
+import java.util.ArrayList;
+
 public class Loan {
     private int amount;
     private int loanDuration;
@@ -7,7 +9,7 @@ public class Loan {
     private int accessRequired;
     private int canPay;
     private int ID;
-    private Status status;
+    private LoanStatus status;
     private LoanType type;
 
     public Loan(int amount, int loanDuration, double interest, int accessRequired, int canPay, int ID) {
@@ -17,7 +19,7 @@ public class Loan {
         this.accessRequired = accessRequired;
         this.canPay = canPay;
         this.ID = ID;
-        this.status = Status.CREATED;
+        this.status = LoanStatus.NEW;
         this.type = determineType(amount);
     }
 
@@ -78,11 +80,11 @@ public class Loan {
         this.ID = ID;
     }
 
-    public Status getStatus() {
+    public LoanStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(LoanStatus status) {
         this.status = status;
     }
 

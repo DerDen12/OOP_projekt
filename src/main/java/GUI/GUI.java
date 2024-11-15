@@ -34,28 +34,34 @@ public class GUI extends JFrame {
 
     private void showMenu() {
         setLayout(new BorderLayout());
-
-        loanListPanel = new JPanel();
-
         aboveLoanPanel = new JPanel();
-        aboveLoanPanel.setLayout(new GridLayout(1,5 ));
+        aboveLoanPanel.setLayout(new GridLayout(1,7 ));
 
-        JLabel idlabel = new JLabel("ID", SwingConstants.CENTER);
-        JLabel amountlabel = new JLabel("Částka", SwingConstants.CENTER);
-        JLabel monthlyPaylabel = new JLabel("Splátka", SwingConstants.CENTER);
-        JLabel timelabel = new JLabel("Měsíce", SwingConstants.CENTER);
-        JLabel interestlabel = new JLabel("Úrok", SwingConstants.CENTER);
+        JLabel idlabelText = new JLabel("ID", SwingConstants.CENTER);
+        JLabel amountlabelText = new JLabel("Částka", SwingConstants.CENTER);
+        JLabel monthlyPaylabelText = new JLabel("Splátka", SwingConstants.CENTER);
+        JLabel timelabelText = new JLabel("Měsíce", SwingConstants.CENTER);
+        JLabel interestlabelText = new JLabel("Úrok", SwingConstants.CENTER);
+        JLabel typeLabelText = new JLabel("Typ půjčky", SwingConstants.CENTER);
+        JLabel statusLabelText = new JLabel("Stav", SwingConstants.CENTER);
 
-        aboveLoanPanel.add(idlabel);
-        aboveLoanPanel.add(amountlabel);
-        aboveLoanPanel.add(monthlyPaylabel);
-        aboveLoanPanel.add(timelabel);
-        aboveLoanPanel.add(interestlabel);
+        idlabelText.setFont(new Font("Arial", Font.BOLD, 18));
+        amountlabelText.setFont(new Font("Arial", Font.BOLD, 18));
+        monthlyPaylabelText.setFont(new Font("Arial", Font.BOLD, 18));
+        timelabelText.setFont(new Font("Arial", Font.BOLD, 18));
+        interestlabelText.setFont(new Font("Arial", Font.BOLD, 18));
+        typeLabelText.setFont(new Font("Arial", Font.BOLD, 18));
+        statusLabelText.setFont(new Font("Arial", Font.BOLD, 18));
 
-        loanListPanel.add(aboveLoanPanel);
+        aboveLoanPanel.add(idlabelText);
+        aboveLoanPanel.add(amountlabelText);
+        aboveLoanPanel.add(monthlyPaylabelText);
+        aboveLoanPanel.add(timelabelText);
+        aboveLoanPanel.add(interestlabelText);
+        aboveLoanPanel.add(typeLabelText);
+        aboveLoanPanel.add(statusLabelText);
 
-        add(loanListPanel, BorderLayout.WEST);
-
+        add(aboveLoanPanel, BorderLayout.NORTH);
 
         basicPanel = new JPanel();
         basicPanel.setLayout(new FlowLayout());
@@ -83,9 +89,44 @@ public class GUI extends JFrame {
 
         setVisible(true);
     }
+    private void displayLoans() {
+        if (loanListPanel == null) {
+            loanListPanel = new JPanel();
+            loanListPanel.setLayout(new GridLayout(0, 7));
+            add(loanListPanel, BorderLayout.CENTER);
+        } else {
+            loanListPanel.removeAll();
+        }
+
+        for (Loan loan : loanSystem.getLoans()) {
+
+            JLabel id = new JLabel(String.valueOf(loan.getID()), SwingConstants.CENTER);
+            JLabel amount = new JLabel(String.valueOf(loan.getAmount()), SwingConstants.CENTER);
+            JLabel monthlyPay = new JLabel(String.valueOf(loan.getCanPay()), SwingConstants.CENTER);
+            JLabel time = new JLabel(String.valueOf(loan.getLoanDuration()), SwingConstants.CENTER);
+            JLabel interest = new JLabel(String.valueOf(loan.getInterest()), SwingConstants.CENTER);
+            JLabel type = new JLabel(String.valueOf(loan.getType()), SwingConstants.CENTER);
+            JLabel status = new JLabel(String.valueOf(loan.getStatus()), SwingConstants.CENTER);
+
+            loanListPanel.add(id);
+            loanListPanel.add(amount);
+            loanListPanel.add(monthlyPay);
+            loanListPanel.add(time);
+            loanListPanel.add(interest);
+            loanListPanel.add(type);
+            loanListPanel.add(status);
+
+        }
+
+        revalidate();
+        repaint();
+    }
     private void showForm() {
         remove(basicPanel);
-        remove(loanListPanel);
+        remove(aboveLoanPanel);
+        if (loanListPanel != null) {
+            loanListPanel.setVisible(false);
+        }
 
         loanForm = new JPanel();
         loanForm.setLayout(new GridLayout(5,5));
@@ -137,6 +178,8 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 remove(loanForm);
                 showMenu();
+                displayLoans();
+                loanListPanel.setVisible(true);
                 revalidate();
                 repaint();
             }
@@ -153,6 +196,8 @@ public class GUI extends JFrame {
 
                 remove(loanForm);
                 showMenu();
+                displayLoans();
+                loanListPanel.setVisible(true);
                 revalidate();
                 repaint();
             }
