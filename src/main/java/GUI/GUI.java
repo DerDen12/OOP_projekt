@@ -13,6 +13,7 @@ public class GUI extends JFrame {
     private JPanel basicPanel;
     private JPanel aboveLoanPanel;
     private JPanel loanListPanel;
+    private JPanel reviewPanel;
     private JPanel loanForm;
     private LoanSystem loanSystem;
     private Person currentUser;
@@ -40,7 +41,7 @@ public class GUI extends JFrame {
         JLabel idlabelText = new JLabel("ID", SwingConstants.CENTER);
         JLabel amountlabelText = new JLabel("Částka", SwingConstants.CENTER);
         JLabel monthlyPaylabelText = new JLabel("Splátka", SwingConstants.CENTER);
-        JLabel timelabelText = new JLabel("Měsíce", SwingConstants.CENTER);
+        JLabel timelabelText = new JLabel("Počet měs.", SwingConstants.CENTER);
         JLabel interestlabelText = new JLabel("Úrok", SwingConstants.CENTER);
         JLabel typeLabelText = new JLabel("Typ půjčky", SwingConstants.CENTER);
         JLabel statusLabelText = new JLabel("Stav", SwingConstants.CENTER);
@@ -107,6 +108,7 @@ public class GUI extends JFrame {
             JLabel interest = new JLabel(String.valueOf(loan.getInterest()), SwingConstants.CENTER);
             JLabel type = new JLabel(String.valueOf(loan.getType()), SwingConstants.CENTER);
             JLabel status = new JLabel(String.valueOf(loan.getStatus()), SwingConstants.CENTER);
+            
 
             loanListPanel.add(id);
             loanListPanel.add(amount);
@@ -121,6 +123,17 @@ public class GUI extends JFrame {
         revalidate();
         repaint();
     }
+    private void reviewForm() {
+        remove(basicPanel);
+        remove(aboveLoanPanel);
+        if (loanListPanel != null) {
+            loanListPanel.setVisible(false);
+        }
+
+        reviewPanel = new JPanel();
+        reviewPanel.setLayout(new GridLayout(5,5));
+
+    }
     private void showForm() {
         remove(basicPanel);
         remove(aboveLoanPanel);
@@ -129,11 +142,10 @@ public class GUI extends JFrame {
         }
 
         loanForm = new JPanel();
-        loanForm.setLayout(new GridLayout(5,5));
+        loanForm.setLayout(new GridLayout(4,4));
 
         JLabel amountText = new JLabel("Částka (CZK):", SwingConstants.CENTER);
         JLabel monthlyPayText = new JLabel("měsiční splátka:", SwingConstants.CENTER);
-        JLabel timeText = new JLabel("Po dobu měsiců:", SwingConstants.CENTER);
         JLabel interestText = new JLabel("S úrokem:", SwingConstants.CENTER);
         JButton cancelButton = new JButton("Zpět");
         JButton confirmButton = new JButton("Potvrdit");
@@ -141,31 +153,25 @@ public class GUI extends JFrame {
 
         JTextField amountInput = new JTextField();
         JTextField monthlyPayInput = new JTextField();
-        JTextField timeInput = new JTextField();
         JTextField interestInput = new JTextField();
 
         amountText.setFont(new Font("Arial", Font.BOLD, 30));
         monthlyPayText.setFont(new Font("Arial", Font.BOLD, 30));
-        timeText.setFont(new Font("Arial", Font.BOLD, 30));
         interestText.setFont(new Font("Arial", Font.BOLD, 30));
         cancelButton.setFont(new Font("Arial", Font.BOLD, 30));
         confirmButton.setFont(new Font("Arial", Font.BOLD, 30));
 
         amountInput.setFont(new Font("Arial", Font.BOLD, 30));
         monthlyPayInput.setFont(new Font("Arial", Font.BOLD, 30));
-        timeInput.setFont(new Font("Arial", Font.BOLD, 30));
         interestInput.setFont(new Font("Arial", Font.BOLD, 30));
         amountInput.setHorizontalAlignment(SwingConstants.CENTER);
         monthlyPayInput.setHorizontalAlignment(SwingConstants.CENTER);
-        timeInput.setHorizontalAlignment(SwingConstants.CENTER);
         interestInput.setHorizontalAlignment(SwingConstants.CENTER);
 
         loanForm.add(amountText);
         loanForm.add(amountInput);
         loanForm.add(monthlyPayText);
         loanForm.add(monthlyPayInput);
-        loanForm.add(timeText);
-        loanForm.add(timeInput);
         loanForm.add(interestText);
         loanForm.add(interestInput);
         loanForm.add(cancelButton);
@@ -189,10 +195,9 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int amount = Integer.parseInt(amountInput.getText());
                 int canPay = Integer.parseInt(monthlyPayInput.getText());
-                int loanDuration = Integer.parseInt(timeInput.getText());
                 double interest = Double.parseDouble(interestInput.getText());
 
-                loanSystem.createLoan(amount, loanDuration, interest, 2, canPay, startID++);
+                loanSystem.createLoan(amount, interest, 2, canPay, startID++);
 
                 remove(loanForm);
                 showMenu();
@@ -211,3 +216,4 @@ public class GUI extends JFrame {
         new GUI();
     }
 }
+
