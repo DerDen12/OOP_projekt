@@ -16,6 +16,8 @@ public class GUI extends JFrame {
     private JPanel reviewPanel;
     private JPanel loanForm;
     private LoanSystem loanSystem;
+    private JPanel buttonPanel;
+    private JPanel rolePanel;
     private Person currentUser;
     private int requiredAccess = 1;
     private int startID = 1;
@@ -65,21 +67,43 @@ public class GUI extends JFrame {
         add(aboveLoanPanel, BorderLayout.NORTH);
 
         basicPanel = new JPanel();
-        basicPanel.setLayout(new FlowLayout());
+        basicPanel.setLayout(new GridLayout(1,3));
 
         JButton createLoan = new JButton("Vytvořit úvěr");
         JButton reviewLoan = new JButton("Zkontrolovat úvěr");
         JButton approveLoan = new JButton("Schválit úvěr");
 
-        createLoan.setFont(new Font("Arial", Font.BOLD, 30));
-        reviewLoan.setFont(new Font("Arial", Font.BOLD, 30));
-        approveLoan.setFont(new Font("Arial", Font.BOLD, 30));
+        createLoan.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewLoan.setFont(new Font("Arial", Font.BOLD, 25));
+        approveLoan.setFont(new Font("Arial", Font.BOLD, 25));
 
         basicPanel.add(createLoan);
         basicPanel.add(reviewLoan);
         basicPanel.add(approveLoan);
 
-        add(basicPanel,  BorderLayout.SOUTH);
+        rolePanel= new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        JButton LoanOfficerButton = new JButton("Úvěrový poradce");
+        JButton ManagerButton = new JButton("Manažer");
+        JButton OwnerButton = new JButton("Majitel");
+
+        LoanOfficerButton.setBackground(new Color(99, 129, 185));
+        ManagerButton.setBackground(new Color(185, 174, 99));
+        OwnerButton.setBackground(new Color(123, 191, 119));
+
+        LoanOfficerButton.setFont(new Font("Arial", Font.BOLD, 15));
+        ManagerButton.setFont(new Font("Arial", Font.BOLD, 15));
+        OwnerButton.setFont(new Font("Arial", Font.BOLD, 15));
+
+        rolePanel.add(LoanOfficerButton);
+        rolePanel.add(ManagerButton);
+        rolePanel.add(OwnerButton);
+
+        buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.add(basicPanel, BorderLayout.NORTH);
+        buttonPanel.add(rolePanel, BorderLayout.SOUTH);
+
+        add(buttonPanel, BorderLayout.SOUTH);
 
         createLoan.addActionListener(new ActionListener() {
             @Override
@@ -108,7 +132,7 @@ public class GUI extends JFrame {
             JLabel interest = new JLabel(String.valueOf(loan.getInterest()), SwingConstants.CENTER);
             JLabel type = new JLabel(String.valueOf(loan.getType()), SwingConstants.CENTER);
             JLabel status = new JLabel(String.valueOf(loan.getStatus()), SwingConstants.CENTER);
-            
+
 
             loanListPanel.add(id);
             loanListPanel.add(amount);
@@ -135,7 +159,7 @@ public class GUI extends JFrame {
 
     }
     private void showForm() {
-        remove(basicPanel);
+        remove(buttonPanel);
         remove(aboveLoanPanel);
         if (loanListPanel != null) {
             loanListPanel.setVisible(false);
