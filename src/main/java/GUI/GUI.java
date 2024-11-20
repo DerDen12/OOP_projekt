@@ -15,6 +15,7 @@ public class GUI extends JFrame {
     private JPanel loanListPanel;
     private JPanel reviewPanel;
     private JPanel loanForm;
+    private JPanel reviewButtonPanel;
     private LoanSystem loanSystem;
     private JPanel buttonPanel;
     private JPanel rolePanel;
@@ -155,7 +156,56 @@ public class GUI extends JFrame {
         }
 
         reviewPanel = new JPanel();
-        reviewPanel.setLayout(new GridLayout(5,5));
+        reviewPanel.setLayout(new GridLayout(6,6));
+
+        JLabel reviewIDText = new JLabel("ID pujčky:");
+        JLabel reviewAmountText = new JLabel("Částka (CZK):", SwingConstants.CENTER);
+        JLabel reviewPayText = new JLabel("měsiční splátka:", SwingConstants.CENTER);
+        JLabel reviewMonthsText = new JLabel("Po dobu měsíců:");
+        JLabel reviewInterestText = new JLabel("S úrokem:", SwingConstants.CENTER);
+        JLabel reviewTypeText = new JLabel("Typ půjčky:");
+
+
+        JLabel reviewID = new JLabel();
+        JLabel reviewAmount = new JLabel();
+        JLabel reviewPay = new JLabel();
+        JLabel reviewMonths = new JLabel();
+        JLabel reviewInterest = new JLabel();
+        JLabel reviewType = new JLabel();
+
+        reviewIDText.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewAmountText.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewPayText.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewMonthsText.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewInterestText.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewTypeText.setFont(new Font("Arial", Font.BOLD, 25));
+
+        reviewID.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewAmount.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewPay.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewMonths.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewInterest.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewType.setFont(new Font("Arial", Font.BOLD, 25));
+
+        reviewPanel.add(reviewIDText);
+        reviewPanel.add(reviewID);
+        reviewPanel.add(reviewAmountText);
+        reviewPanel.add(reviewAmount);
+        reviewPanel.add(reviewPayText);
+        reviewPanel.add(reviewPay);
+        reviewPanel.add(reviewMonthsText);
+        reviewPanel.add(reviewMonths);
+        reviewPanel.add(reviewInterestText);
+        reviewPanel.add(reviewInterest);
+        reviewPanel.add(reviewTypeText);
+        reviewPanel.add(reviewType);
+
+        reviewButtonPanel = new JPanel();
+        reviewButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        JButton returnButton = new JButton();
+        JButton DenyButton = new JButton();
+        JButton ConfirmButton = new JButton();
 
     }
     private void showForm() {
