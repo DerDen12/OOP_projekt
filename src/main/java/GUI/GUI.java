@@ -207,6 +207,8 @@ public class GUI extends JFrame {
         reviewPanel.add(reviewTypeText);
         reviewPanel.add(reviewType);
 
+        add(reviewPanel, BorderLayout.NORTH);
+
         reviewButtonPanel = new JPanel();
         reviewButtonPanel.setLayout(new GridLayout(1,3));
 
@@ -222,12 +224,7 @@ public class GUI extends JFrame {
         DenyButton.setFont(new Font("Arial", Font.BOLD, 15));
         ConfirmButton.setFont(new Font("Arial", Font.BOLD, 15));
 
-        fullreviewPanel = new JPanel(new GridLayout());
-
-        fullreviewPanel.add(reviewPanel, BorderLayout.NORTH);
-        fullreviewPanel.add(reviewButtonPanel, BorderLayout.SOUTH);
-
-        add(fullreviewPanel);
+        add(reviewButtonPanel, BorderLayout.SOUTH);
 
         revalidate();
         repaint();
