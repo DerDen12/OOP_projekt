@@ -14,6 +14,14 @@ public class LoanSystem implements LoanHandler, LoanCalculation {
     public int calculateAmountOfMonths(int amount, double interest, int canPay) {
         return (int) Math.ceil((amount * (1 + interest / 100)) / canPay);
     }
+    public Loan findLoanByID(int loanID) {
+        for (Loan loan : loans) {
+            if (loan.getID() == loanID) {
+                return loan;
+            }
+        }
+        return null;
+    }
     @Override
     public void createLoan(int amount, double interest, int accessRequired, int canPay, int ID) {
         loanDuration = calculateAmountOfMonths(amount,interest,canPay);
