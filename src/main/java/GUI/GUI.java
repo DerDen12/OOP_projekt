@@ -168,9 +168,9 @@ public class GUI extends JFrame {
         JLabel reviewIDText = new JLabel("ID pujčky:");
         JLabel reviewAmountText = new JLabel("Částka (CZK):", SwingConstants.CENTER);
         JLabel reviewPayText = new JLabel("měsiční splátka:", SwingConstants.CENTER);
-        JLabel reviewMonthsText = new JLabel("Po dobu měsíců:");
+        JLabel reviewMonthsText = new JLabel("Po dobu měsíců:", SwingConstants.CENTER);
         JLabel reviewInterestText = new JLabel("S úrokem:", SwingConstants.CENTER);
-        JLabel reviewTypeText = new JLabel("Typ půjčky:");
+        JLabel reviewTypeText = new JLabel("Typ půjčky:", SwingConstants.CENTER);
 
 
         JLabel reviewID = new JLabel(" a");
@@ -210,15 +210,19 @@ public class GUI extends JFrame {
         reviewButtonPanel = new JPanel();
         reviewButtonPanel.setLayout(new GridLayout(1,3));
 
-        JButton returnButton = new JButton();
-        JButton DenyButton = new JButton();
-        JButton ConfirmButton = new JButton();
+        JButton returnButton = new JButton("Vrátit se");
+        JButton DenyButton = new JButton("Odmítnout");
+        JButton ConfirmButton = new JButton("Povolit");
 
         reviewButtonPanel.add(returnButton);
         reviewButtonPanel.add(DenyButton);
         reviewButtonPanel.add(ConfirmButton);
 
-        fullreviewPanel = new JPanel(new BorderLayout());
+        returnButton.setFont(new Font("Arial", Font.BOLD, 15));
+        DenyButton.setFont(new Font("Arial", Font.BOLD, 15));
+        ConfirmButton.setFont(new Font("Arial", Font.BOLD, 15));
+
+        fullreviewPanel = new JPanel(new GridLayout());
 
         fullreviewPanel.add(reviewPanel, BorderLayout.NORTH);
         fullreviewPanel.add(reviewButtonPanel, BorderLayout.SOUTH);
