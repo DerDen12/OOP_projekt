@@ -14,6 +14,7 @@ public class GUI extends JFrame {
     private JPanel aboveLoanPanel;
     private JPanel loanListPanel;
     private JPanel reviewPanel;
+    private JPanel fullreviewPanel;
     private JPanel loanForm;
     private JPanel reviewButtonPanel;
     private LoanSystem loanSystem;
@@ -112,6 +113,12 @@ public class GUI extends JFrame {
                 showForm();
             }
         });
+        reviewLoan.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reviewForm();
+            }
+        });
 
         setVisible(true);
     }
@@ -149,14 +156,14 @@ public class GUI extends JFrame {
         repaint();
     }
     private void reviewForm() {
-        remove(basicPanel);
+        remove(buttonPanel);
         remove(aboveLoanPanel);
         if (loanListPanel != null) {
             loanListPanel.setVisible(false);
         }
 
         reviewPanel = new JPanel();
-        reviewPanel.setLayout(new GridLayout(6,6));
+        reviewPanel.setLayout(new GridLayout(6,2));
 
         JLabel reviewIDText = new JLabel("ID pujčky:");
         JLabel reviewAmountText = new JLabel("Částka (CZK):", SwingConstants.CENTER);
@@ -166,12 +173,12 @@ public class GUI extends JFrame {
         JLabel reviewTypeText = new JLabel("Typ půjčky:");
 
 
-        JLabel reviewID = new JLabel();
-        JLabel reviewAmount = new JLabel();
-        JLabel reviewPay = new JLabel();
-        JLabel reviewMonths = new JLabel();
-        JLabel reviewInterest = new JLabel();
-        JLabel reviewType = new JLabel();
+        JLabel reviewID = new JLabel(" a");
+        JLabel reviewAmount = new JLabel("a ");
+        JLabel reviewPay = new JLabel("a ");
+        JLabel reviewMonths = new JLabel(" a");
+        JLabel reviewInterest = new JLabel("a ");
+        JLabel reviewType = new JLabel(" a");
 
         reviewIDText.setFont(new Font("Arial", Font.BOLD, 25));
         reviewAmountText.setFont(new Font("Arial", Font.BOLD, 25));
@@ -201,11 +208,25 @@ public class GUI extends JFrame {
         reviewPanel.add(reviewType);
 
         reviewButtonPanel = new JPanel();
-        reviewButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        reviewButtonPanel.setLayout(new GridLayout(1,3));
 
         JButton returnButton = new JButton();
         JButton DenyButton = new JButton();
         JButton ConfirmButton = new JButton();
+
+        reviewButtonPanel.add(returnButton);
+        reviewButtonPanel.add(DenyButton);
+        reviewButtonPanel.add(ConfirmButton);
+
+        fullreviewPanel = new JPanel(new BorderLayout());
+
+        fullreviewPanel.add(reviewPanel, BorderLayout.NORTH);
+        fullreviewPanel.add(reviewButtonPanel, BorderLayout.SOUTH);
+
+        add(fullreviewPanel);
+
+        revalidate();
+        repaint();
 
     }
     private void showForm() {
@@ -216,7 +237,7 @@ public class GUI extends JFrame {
         }
 
         loanForm = new JPanel();
-        loanForm.setLayout(new GridLayout(4,4));
+        loanForm.setLayout(new GridLayout(4,2));
 
         JLabel amountText = new JLabel("Částka (CZK):", SwingConstants.CENTER);
         JLabel monthlyPayText = new JLabel("měsiční splátka:", SwingConstants.CENTER);
