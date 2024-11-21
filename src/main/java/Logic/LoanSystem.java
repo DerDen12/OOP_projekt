@@ -5,8 +5,18 @@ import java.util.ArrayList;
 public class LoanSystem implements LoanCreation, LoanCalculation {
     private ArrayList<Loan> loans;
     private int loanDuration;
+    private LoanHandler loanHandler;
     public LoanSystem() {
         loans = new ArrayList<>();
+
+        LoanHandler loanOfficerHandler = new LoanOfficerHandler();
+        LoanHandler loanManagerHandler = new LoanManagerHandler();
+        LoanHandler loanOwnerHandler = new LoanOwnerHandler();
+
+        loanOfficerHandler.setNextHandler(loanManagerHandler);
+        loanManagerHandler.setNextHandler(loanOwnerHandler);
+
+        this.loanHandler = loanOfficerHandler;
     }
     @Override
     public int calculateAmountOfMonths(int amount, double interest, int canPay) {
@@ -21,12 +31,20 @@ public class LoanSystem implements LoanCreation, LoanCalculation {
         return null;
     }
     @Override
-    public void createLoan(int amount, double interest, int accessRequired, int canPay, int ID) {
+    public Loan createLoan(int amount, double interest, int accessRequired, int canPay, int ID) {
         loanDuration = calculateAmountOfMonths(amount,interest,canPay);
         Loan newloan = new Loan(amount, loanDuration, interest,2,canPay, ID);
         loans.add(newloan);
         System.out.println(newloan);
 
+        if (loanHandler == null) {
+            System.out.println("loanHandler is null");
+        } else {
+            System.out.println("Handling loan");
+            loanHandler.handleLoan(newloan);
+        }
+
+        return newloan;
     }
 
     public ArrayList<Loan> getLoans() {

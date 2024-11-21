@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GUI extends JFrame {
-
     private JPanel basicPanel;
     private JPanel aboveLoanPanel;
     private JPanel loanListPanel;
@@ -26,10 +25,14 @@ public class GUI extends JFrame {
     private JPanel rolePanel;
     private Person currentUser;
     private int startID = 1;
+    private LoanOfficerHandler loanOfficerHandler;
+    private LoanManagerHandler loanManagerHandler;
 
     public GUI() {
         loanSystem = new LoanSystem();
         currentUser = new User("New User");
+        loanOfficerHandler = new LoanOfficerHandler();
+        loanManagerHandler = new LoanManagerHandler();
 
         setTitle("Bankovnictvý-Úvěry");
         setSize(800,600);
@@ -115,9 +118,10 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (currentUser.getAccess()>= 1) {
-                showForm();
-                revalidate();
-                repaint();
+
+                    showForm();
+                    revalidate();
+                    repaint();
                 } else {
                     JOptionPane.showMessageDialog(GUI.this,"Nemáte dostatečný přístup k vytvoření úvěru.", "Chyba přístupu", JOptionPane.ERROR_MESSAGE);
                 }
@@ -186,6 +190,7 @@ public class GUI extends JFrame {
         }
 
         for (Loan loan : loanSystem.getLoans()) {
+            loanManagerHandler.handleLoan(loan);
 
             JLabel id = new JLabel(String.valueOf(loan.getID()), SwingConstants.CENTER);
             JLabel amount = new JLabel(String.valueOf(loan.getAmount()), SwingConstants.CENTER);
@@ -422,6 +427,10 @@ public class GUI extends JFrame {
         denyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (loan.getStatus() == LoanStatus.APPROVED) {
+                    JOptionPane.showMessageDialog(null, "Půjčka byla již schválena. Stav nelze změnit.");
+                    return;
+                }
                 loan.setStatus(LoanStatus.DENIED);
                 remove(reviewPanel);
                 remove(reviewButtonPanel);
@@ -436,6 +445,7 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loan.setStatus(LoanStatus.REVIEWED);
+                loanOfficerHandler.handleLoan(loan);
                 remove(reviewPanel);
                 remove(reviewButtonPanel);
                 showMenu();
@@ -513,7 +523,11 @@ public class GUI extends JFrame {
                 int canPay = Integer.parseInt(monthlyPayInput.getText());
                 double interest = Double.parseDouble(interestInput.getText());
 
-                loanSystem.createLoan(amount, interest, 2, canPay, startID++);
+                Loan loan = loanSystem.createLoan(amount, interest, 2, canPay, startID++);
+
+                if (currentUser.getAccess()>= 3) {
+                    loan.setStatus(LoanStatus.APPROVED);
+                }
 
                 remove(loanForm);
                 showMenu();
@@ -523,6 +537,7 @@ public class GUI extends JFrame {
                 repaint();
             }
         });
+
 
         revalidate();
         repaint();
