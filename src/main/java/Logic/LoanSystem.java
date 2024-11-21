@@ -2,7 +2,7 @@ package Logic;
 
 import java.util.ArrayList;
 
-public class LoanSystem implements LoanHandler, LoanCalculation {
+public class LoanSystem implements LoanCreation, LoanCalculation {
     private ArrayList<Loan> loans;
     private int loanDuration;
     public LoanSystem() {
@@ -27,21 +27,6 @@ public class LoanSystem implements LoanHandler, LoanCalculation {
         loans.add(newloan);
         System.out.println(newloan);
 
-    }
-    @Override
-    public void reviewLoan(Loan loan) {
-        loan.setStatus(LoanStatus.REVIEWED);
-
-    }
-
-    @Override
-    public void approveLoan(Loan loan) {
-        loan.setStatus(LoanStatus.APPROVED);
-    }
-
-    @Override
-    public void denyLoan(Loan loan) {
-        loan.setStatus(LoanStatus.DENIED);
     }
 
     public ArrayList<Loan> getLoans() {
