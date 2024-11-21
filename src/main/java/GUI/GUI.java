@@ -1,12 +1,15 @@
 package GUI;
 
 import Logic.*;
+import Roles.LoanOfficer;
+import Roles.Manager;
+import Roles.Owner;
+import Roles.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class GUI extends JFrame {
 
@@ -14,19 +17,19 @@ public class GUI extends JFrame {
     private JPanel aboveLoanPanel;
     private JPanel loanListPanel;
     private JPanel reviewPanel;
-    private JPanel IDpanel;
-    private JPanel fullreviewPanel;
+    private JPanel reviewIDpanel;
+    private JPanel approveIDpanel;
     private JPanel loanForm;
     private JPanel reviewButtonPanel;
     private LoanSystem loanSystem;
     private JPanel buttonPanel;
     private JPanel rolePanel;
     private Person currentUser;
-    private int requiredAccess = 1;
     private int startID = 1;
 
     public GUI() {
-        loanSystem = new LoanSystem(currentUser);
+        loanSystem = new LoanSystem();
+        currentUser = new User("New User");
 
         setTitle("Bankovnictvý-Úvěry");
         setSize(800,600);
@@ -111,15 +114,61 @@ public class GUI extends JFrame {
         createLoan.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (currentUser.getAccess()>= 1) {
                 showForm();
                 revalidate();
                 repaint();
+                } else {
+                    JOptionPane.showMessageDialog(GUI.this,"Nemáte dostatečný přístup k vytvoření úvěru.", "Chyba přístupu", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         reviewLoan.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                IDmenu();
+                if (currentUser.getAccess()>= 2) {
+                reviewIDmenu();
+                revalidate();
+                repaint();
+                } else {
+                    JOptionPane.showMessageDialog(GUI.this,"Nemáte dostatečný přístup k zkontrlování úvěru.", "Chyba přístupu", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        approveLoan.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (currentUser.getAccess()>= 3) {
+                    approveIDmenu();
+                    revalidate();
+                    repaint();
+                } else {
+                    JOptionPane.showMessageDialog(GUI.this,"Nemáte dostatečný přístup k povolení úvěru.", "Chyba přístupu", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        LoanOfficerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentUser = new LoanOfficer("Loan Officer");
+                revalidate();
+                repaint();
+
+            }
+        });
+        ManagerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentUser = new Manager("Loan Officer");
+                revalidate();
+                repaint();
+
+            }
+        });
+        OwnerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentUser = new Owner("Loan Officer");
                 revalidate();
                 repaint();
             }
@@ -160,40 +209,40 @@ public class GUI extends JFrame {
         revalidate();
         repaint();
     }
-    private void IDmenu() {
+    private void reviewIDmenu() {
         remove(buttonPanel);
 
-        IDpanel = new JPanel();
-        IDpanel.setLayout(new GridLayout(2,2));
+        reviewIDpanel = new JPanel();
+        reviewIDpanel.setLayout(new GridLayout(2,2));
 
-        JLabel IDtext = new JLabel("ID pujčky:", SwingConstants.CENTER);
+        JLabel reviewIDtext = new JLabel("ID pujčky:", SwingConstants.CENTER);
 
-        IDtext.setFont(new Font("Arial", Font.BOLD, 18));
+        reviewIDtext.setFont(new Font("Arial", Font.BOLD, 18));
 
-        JTextField IDinput = new JTextField("",SwingConstants.CENTER);
+        JTextField reviewIDinput = new JTextField("",SwingConstants.CENTER);
 
-        IDinput.setHorizontalAlignment(SwingConstants.CENTER);
-        IDinput.setFont(new Font("Arial", Font.BOLD, 18));
+        reviewIDinput.setHorizontalAlignment(SwingConstants.CENTER);
+        reviewIDinput.setFont(new Font("Arial", Font.BOLD, 18));
 
-        JButton backButton = new JButton("Vrátit se");
-        JButton goButton = new JButton("Ukázat pujčku");
+        JButton reviewbackButton = new JButton("Vrátit se");
+        JButton reviewgoButton = new JButton("Ukázat pujčku");
 
-        backButton.setFont(new Font("Arial", Font.BOLD, 25));
-        goButton.setFont(new Font("Arial", Font.BOLD, 25));
-        backButton.setPreferredSize(new Dimension(200, 80));
-        goButton.setPreferredSize(new Dimension(200, 80));
+        reviewbackButton.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewgoButton.setFont(new Font("Arial", Font.BOLD, 25));
+        reviewbackButton.setPreferredSize(new Dimension(200, 80));
+        reviewgoButton.setPreferredSize(new Dimension(200, 80));
 
-        IDpanel.add(IDtext);
-        IDpanel.add(IDinput);
-        IDpanel.add(backButton);
-        IDpanel.add(goButton);
+        reviewIDpanel.add(reviewIDtext);
+        reviewIDpanel.add(reviewIDinput);
+        reviewIDpanel.add(reviewbackButton);
+        reviewIDpanel.add(reviewgoButton);
 
-        add(IDpanel, BorderLayout.SOUTH);
+        add(reviewIDpanel, BorderLayout.SOUTH);
 
-        goButton.addActionListener(new ActionListener() {
+        reviewgoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String IDInputText = IDinput.getText();
+                String IDInputText = reviewIDinput.getText();
 
                 int loanID = Integer.parseInt(IDInputText);
 
@@ -207,11 +256,11 @@ public class GUI extends JFrame {
                 }
             }
         });
-        backButton.addActionListener(new ActionListener() {
+        reviewbackButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 remove(aboveLoanPanel);
-                remove(IDpanel);
+                remove(reviewIDpanel);
                 showMenu();
                 displayLoans();
                 loanListPanel.setVisible(true);
@@ -222,8 +271,73 @@ public class GUI extends JFrame {
         revalidate();
         repaint();
     }
+    private void approveIDmenu() {
+        remove(buttonPanel);
+
+        approveIDpanel = new JPanel();
+        approveIDpanel.setLayout(new GridLayout(2,2));
+
+        JLabel approveIDtext = new JLabel("ID pujčky:", SwingConstants.CENTER);
+
+        approveIDtext.setFont(new Font("Arial", Font.BOLD, 18));
+
+        JTextField approveIDinput = new JTextField("",SwingConstants.CENTER);
+
+        approveIDinput.setHorizontalAlignment(SwingConstants.CENTER);
+        approveIDinput.setFont(new Font("Arial", Font.BOLD, 18));
+
+        JButton approvebackButton = new JButton("Vrátit se");
+        JButton approvegoButton = new JButton("Ukázat pujčku");
+
+        approvebackButton.setFont(new Font("Arial", Font.BOLD, 25));
+        approvegoButton.setFont(new Font("Arial", Font.BOLD, 25));
+        approvebackButton.setPreferredSize(new Dimension(200, 80));
+        approvegoButton.setPreferredSize(new Dimension(200, 80));
+
+        approveIDpanel.add(approveIDtext);
+        approveIDpanel.add(approveIDinput);
+        approveIDpanel.add(approvebackButton);
+        approveIDpanel.add(approvegoButton);
+
+        add(approveIDpanel, BorderLayout.SOUTH);
+
+        approvegoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String IDInputText = approveIDinput.getText();
+
+                int loanID = Integer.parseInt(IDInputText);
+
+                Loan loan = loanSystem.findLoanByID(loanID);
+                if (loan != null) {
+                    approvalForm(loan);
+                    revalidate();
+                    repaint();
+                } else {
+                    System.out.println("Pujčka nenalezena");
+                }
+            }
+        });
+        approvebackButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                remove(aboveLoanPanel);
+                remove(approveIDpanel);
+                showMenu();
+                displayLoans();
+                loanListPanel.setVisible(true);
+                revalidate();
+                repaint();
+            }
+        });
+        revalidate();
+        repaint();
+    }
+    private void approvalForm(Loan loan) {
+
+    }
     private void reviewForm(Loan loan) {
-        remove(IDpanel);
+        remove(reviewIDpanel);
         remove(aboveLoanPanel);
         if (loanListPanel != null) {
             loanListPanel.setVisible(false);

@@ -3,12 +3,10 @@ package Logic;
 import java.util.ArrayList;
 
 public class LoanSystem implements LoanHandler, LoanCalculation {
-    private Person person;
     private ArrayList<Loan> loans;
     private int loanDuration;
-    public LoanSystem(Person person) {
+    public LoanSystem() {
         loans = new ArrayList<>();
-        this.person = person;
     }
     @Override
     public int calculateAmountOfMonths(int amount, double interest, int canPay) {
