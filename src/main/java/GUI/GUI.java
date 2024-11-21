@@ -177,7 +177,8 @@ public class GUI extends JFrame {
                 repaint();
             }
         });
-
+        revalidate();
+        repaint();
         setVisible(true);
     }
     private void displayLoans() {
@@ -257,7 +258,7 @@ public class GUI extends JFrame {
                     revalidate();
                     repaint();
                 } else {
-                    System.out.println("Pujčka nenalezena");
+                    JOptionPane.showMessageDialog(GUI.this,"Půjčka s touto ID neexistuje", "Neplatná akce.", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -319,7 +320,7 @@ public class GUI extends JFrame {
                     revalidate();
                     repaint();
                 } else {
-                    System.out.println("Pujčka nenalezena");
+                    JOptionPane.showMessageDialog(GUI.this,"Půjčka s touto ID neexistuje", "Neplatná akce.", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -428,7 +429,7 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (loan.getStatus() == LoanStatus.APPROVED) {
-                    JOptionPane.showMessageDialog(null, "Půjčka byla již schválena. Stav nelze změnit.");
+                    JOptionPane.showMessageDialog(GUI.this,"Půjčka byla již schválena. Stav nelze změnit.", "Neplatná akce.", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 loan.setStatus(LoanStatus.DENIED);
@@ -477,9 +478,9 @@ public class GUI extends JFrame {
         JButton confirmButton = new JButton("Potvrdit");
 
 
-        JTextField amountInput = new JTextField();
-        JTextField monthlyPayInput = new JTextField();
-        JTextField interestInput = new JTextField();
+        JTextField amountInput = new JTextField("");
+        JTextField monthlyPayInput = new JTextField("");
+        JTextField interestInput = new JTextField("");
 
         amountText.setFont(new Font("Arial", Font.BOLD, 30));
         monthlyPayText.setFont(new Font("Arial", Font.BOLD, 30));
@@ -519,6 +520,11 @@ public class GUI extends JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                if (amountInput.getText().isEmpty() || monthlyPayInput.getText().isEmpty() || interestInput.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(GUI.this,"Všechna pole musí být vyplněna","Chyba při zadávání",JOptionPane.ERROR_MESSAGE);
+                }
+
                 int amount = Integer.parseInt(amountInput.getText());
                 int canPay = Integer.parseInt(monthlyPayInput.getText());
                 double interest = Double.parseDouble(interestInput.getText());
