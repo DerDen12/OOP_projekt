@@ -18,6 +18,8 @@ public class GUI extends JFrame {
     private JPanel reviewPanel;
     private JPanel reviewIDpanel;
     private JPanel approveIDpanel;
+    private JPanel approvePanel;
+    private JPanel approveButtonPanel;
     private JPanel loanForm;
     private JPanel reviewButtonPanel;
     private LoanSystem loanSystem;
@@ -340,6 +342,122 @@ public class GUI extends JFrame {
         repaint();
     }
     private void approvalForm(Loan loan) {
+        remove(approveIDpanel);
+        remove(aboveLoanPanel);
+        if (loanListPanel != null) {
+            loanListPanel.setVisible(false);
+        }
+
+        approvePanel = new JPanel();
+        approvePanel.setLayout(new GridLayout(6,2));
+
+        JLabel approveIDText = new JLabel("ID pujčky:", SwingConstants.CENTER);
+        JLabel approveAmountText = new JLabel("Částka (CZK):", SwingConstants.CENTER);
+        JLabel approvePayText = new JLabel("měsiční splátka:", SwingConstants.CENTER);
+        JLabel approveMonthsText = new JLabel("Po dobu měsíců:", SwingConstants.CENTER);
+        JLabel approveInterestText = new JLabel("S úrokem:", SwingConstants.CENTER);
+        JLabel approveTypeText = new JLabel("Typ půjčky:", SwingConstants.CENTER);
+
+
+        JLabel approveID = new JLabel(String.valueOf(loan.getID()), SwingConstants.CENTER);
+        JLabel approveAmount = new JLabel(String.valueOf(loan.getAmount()), SwingConstants.CENTER);
+        JLabel approvePay = new JLabel(String.valueOf(loan.getCanPay()), SwingConstants.CENTER);
+        JLabel approveMonths = new JLabel(String.valueOf(loan.getLoanDuration()), SwingConstants.CENTER);
+        JLabel approveInterest = new JLabel(String.valueOf(loan.getInterest()), SwingConstants.CENTER);
+        JLabel approveType = new JLabel(String.valueOf(loan.getType()), SwingConstants.CENTER);
+
+        approveIDText.setFont(new Font("Arial", Font.BOLD, 25));
+        approveAmountText.setFont(new Font("Arial", Font.BOLD, 25));
+        approvePayText.setFont(new Font("Arial", Font.BOLD, 25));
+        approveMonthsText.setFont(new Font("Arial", Font.BOLD, 25));
+        approveInterestText.setFont(new Font("Arial", Font.BOLD, 25));
+        approveTypeText.setFont(new Font("Arial", Font.BOLD, 25));
+
+        approveID.setFont(new Font("Arial", Font.BOLD, 25));
+        approveAmount.setFont(new Font("Arial", Font.BOLD, 25));
+        approvePay.setFont(new Font("Arial", Font.BOLD, 25));
+        approveMonths.setFont(new Font("Arial", Font.BOLD, 25));
+        approveInterest.setFont(new Font("Arial", Font.BOLD, 25));
+        approveType.setFont(new Font("Arial", Font.BOLD, 25));
+
+        approvePanel.add(approveIDText);
+        approvePanel.add(approveID);
+        approvePanel.add(approveAmountText);
+        approvePanel.add(approveAmount);
+        approvePanel.add(approvePayText);
+        approvePanel.add(approvePay);
+        approvePanel.add(approveMonthsText);
+        approvePanel.add(approveMonths);
+        approvePanel.add(approveInterestText);
+        approvePanel.add(approveInterest);
+        approvePanel.add(approveTypeText);
+        approvePanel.add(approveType);
+
+        add(approvePanel, BorderLayout.NORTH);
+
+        approveButtonPanel = new JPanel();
+        approveButtonPanel.setLayout(new GridLayout(1,3));
+
+        JButton approveReturnButton = new JButton("Vrátit se");
+        JButton approveDenyButton = new JButton("Odmítnout");
+        JButton approveConfirmButton = new JButton("Povolit");
+
+        approveButtonPanel.add(approveReturnButton);
+        approveButtonPanel.add(approveDenyButton);
+        approveButtonPanel.add(approveConfirmButton);
+
+        approveReturnButton.setFont(new Font("Arial", Font.BOLD, 15));
+        approveDenyButton.setFont(new Font("Arial", Font.BOLD, 15));
+        approveConfirmButton.setFont(new Font("Arial", Font.BOLD, 15));
+
+        add(approveButtonPanel, BorderLayout.SOUTH);
+
+        approveReturnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                remove(approvePanel);
+                remove(approveButtonPanel);
+                showMenu();
+                displayLoans();
+                loanListPanel.setVisible(true);
+                revalidate();
+                repaint();
+            }
+        });
+        approveDenyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (loan.getStatus() == LoanStatus.APPROVED) {
+                    JOptionPane.showMessageDialog(GUI.this,"Půjčka byla již schválena. Stav nelze změnit.", "Neplatná akce.", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                loan.setStatus(LoanStatus.DENIED);
+                remove(approvePanel);
+                remove(approveButtonPanel);
+                showMenu();
+                displayLoans();
+                loanListPanel.setVisible(true);
+                revalidate();
+                repaint();
+            }
+        });
+        approveConfirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loan.setStatus(LoanStatus.APPROVED);
+                loanOfficerHandler.handleLoan(loan);
+                remove(approvePanel);
+                remove(approveButtonPanel);
+                showMenu();
+                displayLoans();
+                loanListPanel.setVisible(true);
+                revalidate();
+                repaint();
+            }
+        });
+
+        revalidate();
+        repaint();
 
     }
     private void reviewForm(Loan loan) {
@@ -399,21 +517,21 @@ public class GUI extends JFrame {
         reviewButtonPanel = new JPanel();
         reviewButtonPanel.setLayout(new GridLayout(1,3));
 
-        JButton returnButton = new JButton("Vrátit se");
-        JButton denyButton = new JButton("Odmítnout");
-        JButton confirmButton = new JButton("Povolit");
+        JButton reviewreturnButton = new JButton("Vrátit se");
+        JButton reviewdenyButton = new JButton("Odmítnout");
+        JButton reviewconfirmButton = new JButton("Povolit");
 
-        reviewButtonPanel.add(returnButton);
-        reviewButtonPanel.add(denyButton);
-        reviewButtonPanel.add(confirmButton);
+        reviewButtonPanel.add(reviewreturnButton);
+        reviewButtonPanel.add(reviewdenyButton);
+        reviewButtonPanel.add(reviewconfirmButton);
 
-        returnButton.setFont(new Font("Arial", Font.BOLD, 15));
-        denyButton.setFont(new Font("Arial", Font.BOLD, 15));
-        confirmButton.setFont(new Font("Arial", Font.BOLD, 15));
+        reviewreturnButton.setFont(new Font("Arial", Font.BOLD, 15));
+        reviewdenyButton.setFont(new Font("Arial", Font.BOLD, 15));
+        reviewconfirmButton.setFont(new Font("Arial", Font.BOLD, 15));
 
         add(reviewButtonPanel, BorderLayout.SOUTH);
 
-        returnButton.addActionListener(new ActionListener() {
+        reviewreturnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 remove(reviewPanel);
@@ -425,7 +543,7 @@ public class GUI extends JFrame {
                 repaint();
             }
         });
-        denyButton.addActionListener(new ActionListener() {
+        reviewdenyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (loan.getStatus() == LoanStatus.APPROVED) {
@@ -442,7 +560,7 @@ public class GUI extends JFrame {
                 repaint();
             }
         });
-        confirmButton.addActionListener(new ActionListener() {
+        reviewconfirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loan.setStatus(LoanStatus.REVIEWED);
