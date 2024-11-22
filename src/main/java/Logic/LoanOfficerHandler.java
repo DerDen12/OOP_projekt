@@ -6,7 +6,7 @@ public class LoanOfficerHandler extends LoanHandler{
         if (loan.getAmount() < 10000 && loan.getStatus() == LoanStatus.NEW) {
             loan.setStatus(LoanStatus.APPROVED);
             System.out.println("Small loan approved");
-        }   else if (loan.getAmount() >= 10000 || loan.getStatus() == LoanStatus.REVIEWED) {
+        }   else {
             passToNext(loan);
         }
     }

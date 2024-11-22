@@ -11,7 +11,7 @@ public class LoanSystem implements LoanCreation, LoanCalculation {
 
         LoanHandler loanOfficerHandler = new LoanOfficerHandler();
         LoanHandler loanManagerHandler = new LoanManagerHandler();
-        LoanHandler loanOwnerHandler = new LoanOwnerHandler();
+        LoanHandler loanOwnerHandler = new LoanSeniorManagerHandler();
 
         loanOfficerHandler.setNextHandler(loanManagerHandler);
         loanManagerHandler.setNextHandler(loanOwnerHandler);

@@ -29,12 +29,18 @@ public class GUI extends JFrame {
     private int startID = 1;
     private LoanOfficerHandler loanOfficerHandler;
     private LoanManagerHandler loanManagerHandler;
+    private LoanSeniorManagerHandler loanSeniorManagerHandler;
 
     public GUI() {
         loanSystem = new LoanSystem();
         currentUser = new User("New User");
         loanOfficerHandler = new LoanOfficerHandler();
         loanManagerHandler = new LoanManagerHandler();
+        loanSeniorManagerHandler = new LoanSeniorManagerHandler();
+
+        loanOfficerHandler.setNextHandler(loanManagerHandler);
+        loanManagerHandler.setNextHandler(loanSeniorManagerHandler);
+        loanSeniorManagerHandler.setNextHandler(null);
 
         setTitle("Bankovnictvý-Úvěry");
         setSize(800,600);
@@ -193,7 +199,7 @@ public class GUI extends JFrame {
         }
 
         for (Loan loan : loanSystem.getLoans()) {
-            loanManagerHandler.handleLoan(loan);
+            loanOfficerHandler.handleLoan(loan);
 
             JLabel id = new JLabel(String.valueOf(loan.getID()), SwingConstants.CENTER);
             JLabel amount = new JLabel(String.valueOf(loan.getAmount()), SwingConstants.CENTER);
@@ -427,7 +433,7 @@ public class GUI extends JFrame {
         approveDenyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (loan.getStatus() == LoanStatus.APPROVED) {
+                if (loan.getStatus() == LoanStatus.APPROVED || loan.getStatus() == LoanStatus.SENI_APPROVED) {
                     JOptionPane.showMessageDialog(GUI.this,"Půjčka byla již schválena. Stav nelze změnit.", "Neplatná akce.", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -546,7 +552,7 @@ public class GUI extends JFrame {
         reviewdenyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (loan.getStatus() == LoanStatus.APPROVED) {
+                if (loan.getStatus() == LoanStatus.APPROVED || loan.getStatus() == LoanStatus.SENI_APPROVED) {
                     JOptionPane.showMessageDialog(GUI.this,"Půjčka byla již schválena. Stav nelze změnit.", "Neplatná akce.", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -563,6 +569,10 @@ public class GUI extends JFrame {
         reviewconfirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (loan.getStatus() == LoanStatus.APPROVED || loan.getStatus() == LoanStatus.SENI_APPROVED) {
+                    JOptionPane.showMessageDialog(GUI.this,"Půjčka byla již schválena. Stav nelze změnit.", "Neplatná akce.", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 loan.setStatus(LoanStatus.REVIEWED);
                 loanOfficerHandler.handleLoan(loan);
                 remove(reviewPanel);
@@ -648,6 +658,8 @@ public class GUI extends JFrame {
                 double interest = Double.parseDouble(interestInput.getText());
 
                 Loan loan = loanSystem.createLoan(amount, interest, 2, canPay, startID++);
+
+                loanOfficerHandler.handleLoan(loan);
 
                 if (currentUser.getAccess()>= 3) {
                     loan.setStatus(LoanStatus.APPROVED);

@@ -1,5 +1,5 @@
 package Logic;
 
 public enum LoanStatus {
-    NEW, REVIEWED, APPROVED, DENIED
+    NEW, REVIEWED,SENI_APPROVED ,APPROVED, DENIED
 }
