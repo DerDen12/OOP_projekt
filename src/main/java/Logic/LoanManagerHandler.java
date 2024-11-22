@@ -5,7 +5,7 @@ public class LoanManagerHandler extends LoanHandler {
     public void handleLoan(Loan loan) {
         if (loan.getAmount() > 10000 && loan.getAmount() <= 50000 && loan.getStatus() == LoanStatus.REVIEWED) {
             loan.setStatus(LoanStatus.APPROVED);
-            System.out.println("Medium loan approved");
+            System.out.println("Medium loan approved by manager");
         } else  {
             passToNext(loan);
         }
