@@ -9,14 +9,7 @@ public class LoanSystem implements LoanCreation, LoanCalculation {
     public LoanSystem() {
         loans = new ArrayList<>();
 
-        LoanHandler loanOfficerHandler = new LoanOfficerHandler();
-        LoanHandler loanManagerHandler = new LoanManagerHandler();
-        LoanHandler loanOwnerHandler = new LoanSeniorManagerHandler();
 
-        loanOfficerHandler.setNextHandler(loanManagerHandler);
-        loanManagerHandler.setNextHandler(loanOwnerHandler);
-
-        this.loanHandler = loanOfficerHandler;
     }
     @Override
     public int calculateAmountOfMonths(int amount, double interest, int canPay) {
