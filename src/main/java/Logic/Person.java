@@ -12,15 +12,4 @@ public abstract class Person {
     public int getAccess() {
         return Access;
     }
-    public void setAccess(int access) {
-        Access = access;
-    }
-
-    public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
-    }
 }

@@ -26,7 +26,7 @@ public class LoanSystem implements LoanCreation, LoanCalculation {
     @Override
     public Loan createLoan(int amount, double interest, int accessRequired, int canPay, int ID) {
         loanDuration = calculateAmountOfMonths(amount,interest,canPay);
-        Loan newloan = new Loan(amount, loanDuration, interest,2,canPay, ID);
+        Loan newloan = new Loan(amount, loanDuration, interest,canPay, ID);
         loans.add(newloan);
         System.out.println(newloan);
 
